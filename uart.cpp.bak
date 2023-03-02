@@ -17,6 +17,7 @@
 #include <memory>
 
 #define SEND_FILE_NAME  "./xindi_480_272.tft"
+#define UART_DEV	"/dev/ttyS0"
 #define INIT_BAUD		115200
 #define TRANSFER_BAUD 	460800
 
@@ -53,7 +54,7 @@ int main(int argc, char** argv) {
 
     char buff[4096];
 
-    if ((fd = open("/dev/ttyS0", O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
+    if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
         printf("OPEN TTY failed\n");
         return 0;
     } else {
@@ -98,7 +99,7 @@ void parse_cmd(char *cmd) {
 			if(TRANSFER_BAUD != INIT_BAUD)
 			{
 				close(fd);
-				if ((fd = open("/dev/ttyS0", O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
+				if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
 					printf("OPEN TTY failed\n");
 					return 0;
 				} 
