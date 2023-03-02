@@ -104,6 +104,7 @@ void parse_cmd(char *cmd) {
 					return;
 				} 
 				set_option(fd, TRANSFER_BAUD, 8, 'N', 1);
+				usleep(1000000);
 			}
 		}
         download_to_screen();
