@@ -18,7 +18,7 @@
 
 #define SEND_FILE_NAME  "./xindi_480_272.tft"
 #define INIT_BAUD		115200
-#define TRANSFER_BAUD 	230400
+#define TRANSFER_BAUD 	115200
 
 std::ifstream tftfile;
 int tft_buff = 4096;
@@ -60,7 +60,8 @@ int main(int argc, char** argv) {
         if (access(SEND_FILE_NAME, F_OK) == 0) {
             init_download_to_screen();
             send_cmd_download(fd, filesize);
-			set_option(fd, TRANSFER_BAUD, 8, 'N', 1);
+			if(TRANSFER_BAUD != INIT_BAUD)
+				set_option(fd, TRANSFER_BAUD, 8, 'N', 1);
 			printf("open file ok\n");
         }
 		else
