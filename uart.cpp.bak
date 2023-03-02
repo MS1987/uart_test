@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
             init_download_to_screen();
 			//first_ack = 0;
             send_cmd_download(fd, filesize);			
-			usleep(1000);	
+			usleep(10000);	
 			if(TRANSFER_BAUD != INIT_BAUD)
 			{
 				close(fd);
