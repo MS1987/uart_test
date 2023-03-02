@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
     } else {
         set_option(fd, 115200, 8, 'N', 1);
         fcntl(fd, F_SETFL, FNDELAY);
-        if (access("SEND_FILE_NAME", F_OK) == 0) {
+        if (access(SEND_FILE_NAME, F_OK) == 0) {
             init_download_to_screen();
             send_cmd_download(fd, filesize);
 			printf("open file ok\n");
@@ -278,11 +278,11 @@ int set_option(int fd, int baudrate, int bits, unsigned char parity, unsigned ch
 }
 
 void init_download_to_screen() {
-    if (access("SEND_FILE_NAME", F_OK) == 0) {
+    if (access(SEND_FILE_NAME, F_OK) == 0) {
         tft_data.clear();
-        tftfile.open("SEND_FILE_NAME");
+        tftfile.open(SEND_FILE_NAME);
         struct stat tft_stat;
-        stat("SEND_FILE_NAME", &tft_stat);
+        stat(SEND_FILE_NAME, &tft_stat);
         filesize = tft_stat.st_size;
         std::cout << "文件大小为: " << filesize << std::endl;
         std::ostringstream temp;

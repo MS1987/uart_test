@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
         printf("OPEN TTY failed\n");
         return 0;
     } else {
-        set_option(fd, 115200, 8, 'N', 1);
+        set_option(fd, 230400, 8, 'N', 1);
         fcntl(fd, F_SETFL, FNDELAY);
         if (access(SEND_FILE_NAME, F_OK) == 0) {
             init_download_to_screen();
@@ -342,6 +342,6 @@ void send_cmd_download_data(int fd, std::string data) {
 }
 
 void send_cmd_download(int fd, int filesize) {
-    std::string cmd = "whmi-wri " + std::to_string(filesize) + ",115200,0\xff\xff\xff";
+    std::string cmd = "whmi-wri " + std::to_string(filesize) + ",230400,0\xff\xff\xff";
     write(fd, cmd.data(), cmd.length());
 }
