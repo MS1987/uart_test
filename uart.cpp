@@ -18,7 +18,7 @@
 
 #define SEND_FILE_NAME  "./xindi_480_272.tft"
 #define INIT_BAUD		115200
-#define TRANSFER_BAUD 	500000
+#define TRANSFER_BAUD 	460800
 
 std::ifstream tftfile;
 int tft_buff = 4096;
@@ -226,7 +226,7 @@ int set_option(int fd, int baudrate, int bits, unsigned char parity, unsigned ch
 
     case 460800:
         speed = B460800;
-        // printf("波特率为460800\n");
+        printf("波特率为460800\n");
         break;
 
     case 500000:
