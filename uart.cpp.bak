@@ -58,6 +58,7 @@ int main(int argc, char** argv) {
         if (access(SEND_FILE_NAME, F_OK) == 0) {
             init_download_to_screen();
             send_cmd_download(fd, filesize);
+			set_option(fd, 230400, 8, 'N', 1);
 			printf("open file ok\n");
         }
 		else
@@ -342,6 +343,6 @@ void send_cmd_download_data(int fd, std::string data) {
 }
 
 void send_cmd_download(int fd, int filesize) {
-    std::string cmd = "whmi-wri " + std::to_string(filesize) + ",115200,0\xff\xff\xff";
+    std::string cmd = "whmi-wri " + std::to_string(filesize) + ",230400,0\xff\xff\xff";
     write(fd, cmd.data(), cmd.length());
 }
