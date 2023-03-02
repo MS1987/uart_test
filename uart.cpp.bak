@@ -45,7 +45,7 @@ void download_to_screen();
 void send_cmd_download_data(int fd, std::string data);
 void send_cmd_download(int fd, int filesize);
 
-int first_ack = 0;
+//int first_ack = 0;
 
 int main(int argc, char** argv) {
     
@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
         fcntl(fd, F_SETFL, FNDELAY);
         if (access(SEND_FILE_NAME, F_OK) == 0) {
             init_download_to_screen();
-			first_ack = 0;
+			//first_ack = 0;
             send_cmd_download(fd, filesize);			
 			usleep(1000);	
 			if(TRANSFER_BAUD != INIT_BAUD)
