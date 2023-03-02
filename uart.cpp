@@ -19,7 +19,7 @@
 #define SEND_FILE_NAME  "./xindi_480_272.tft"
 #define UART_DEV	"/dev/ttyS0"
 #define INIT_BAUD		115200
-#define TRANSFER_BAUD 	230400
+#define TRANSFER_BAUD 	512000
 
 std::ifstream tftfile;
 int tft_buff = 4096;
@@ -45,7 +45,7 @@ void download_to_screen();
 void send_cmd_download_data(int fd, std::string data);
 void send_cmd_download(int fd, int filesize);
 
-int first_ack = 0;
+//int first_ack = 0;
 
 int main(int argc, char** argv) {
     
@@ -62,9 +62,21 @@ int main(int argc, char** argv) {
         fcntl(fd, F_SETFL, FNDELAY);
         if (access(SEND_FILE_NAME, F_OK) == 0) {
             init_download_to_screen();
-			first_ack = 0;
-            send_cmd_download(fd, filesize);
-			
+			//first_ack = 0;
+            send_cmd_download(fd, filesize);			
+			usleep(1000);	
+			if(TRANSFER_BAUD != INIT_BAUD)
+			{
+				close(fd);
+				
+				if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
+					printf("OPEN TTY failed\n");
+					return;
+				} 
+				set_option(fd, TRANSFER_BAUD, 8, 'N', 1);
+				
+			}
+		
 				
 			printf("open file ok\n");
         }
@@ -92,23 +104,7 @@ void parse_cmd(char *cmd) {
     switch (cmd[0])
     {
     case 0x5:
-	case 0xfe:
-		if(first_ack == 0)
-		{
-			first_ack = 1;
-			
-			if(TRANSFER_BAUD != INIT_BAUD)
-			{
-				close(fd);
-				usleep(100000);
-				if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
-					printf("OPEN TTY failed\n");
-					return;
-				} 
-				set_option(fd, TRANSFER_BAUD, 8, 'N', 1);
-				usleep(100000);
-			}
-		}
+		
         download_to_screen();
         break;
     
@@ -186,45 +182,7 @@ int set_option(int fd, int baudrate, int bits, unsigned char parity, unsigned ch
     // 设置波特率
     switch (baudrate)
     {
-    case 1200:
-        speed = B1200;
-        // printf("波特率为1200\n");
-        break;
-    
-    case 1800:
-        speed = B1800;
-        // printf("波特率为1800\n");
-        break;
-
-    case 2400:
-        speed = B2400;
-        // printf("波特率为2400\n");
-        break;
-
-    case 4800:
-        speed = B4800;
-        // printf("波特率为4800\n");
-        break;
-
-    case 9600:
-        speed = B9600;
-        printf("波特率为9600\n");
-        break;
-
-    case 19200:
-        speed = B19200;
-        // printf("波特率为19200\n");
-        break;
-
-    case 38400:
-        speed = B38400;
-        // printf("波特率为38400\n");
-        break;
-
-    case 57600:
-        speed = B57600;
-        // printf("波特率为57600\n");
-        break;
+  
 
     case 115200:
         speed = B115200;
@@ -235,15 +193,16 @@ int set_option(int fd, int baudrate, int bits, unsigned char parity, unsigned ch
         speed = B230400;
          printf("波特率为230400\n");
         break;
-
-    case 460800:
-        speed = B460800;
-        printf("波特率为460800\n");
+		
+	case 256000:
+        speed = B256000;
+         printf("波特率为256000\n");
         break;
+    
 
-    case 500000:
-        speed = B500000;
-         printf("波特率为500000\n");
+    case 512000:
+        speed = B512000;
+         printf("波特率为512000\n");
         break;
 
     case 921600:
