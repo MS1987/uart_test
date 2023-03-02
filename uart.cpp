@@ -346,6 +346,6 @@ void send_cmd_download_data(int fd, std::string data) {
 }
 
 void send_cmd_download(int fd, int filesize) {
-    std::string cmd = "whmi-wri " + std::to_string(filesize) + ",230400,0\xff\xff\xff";
+    std::string cmd = "whmi-wri " + std::to_string(filesize) + ",TRANSFER_BAUD,0\xff\xff\xff";
     write(fd, cmd.data(), cmd.length());
 }
