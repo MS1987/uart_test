@@ -100,13 +100,13 @@ void parse_cmd(char *cmd) {
 			if(TRANSFER_BAUD != INIT_BAUD)
 			{
 				close(fd);
-				usleep(1000000);
+				usleep(100000);
 				if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
 					printf("OPEN TTY failed\n");
 					return;
 				} 
 				set_option(fd, TRANSFER_BAUD, 8, 'N', 1);
-				usleep(2000000);
+				usleep(100000);
 			}
 		}
         download_to_screen();
