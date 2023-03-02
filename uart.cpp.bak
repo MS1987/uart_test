@@ -92,6 +92,7 @@ void parse_cmd(char *cmd) {
     switch (cmd[0])
     {
     case 0x5:
+	case 0xfe:
 		if(first_ack == 0)
 		{
 			first_ack = 1;
