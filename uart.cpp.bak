@@ -60,6 +60,7 @@ int main(int argc, char** argv) {
         if (access(SEND_FILE_NAME, F_OK) == 0) {
             init_download_to_screen();
             send_cmd_download(fd, filesize);
+			usleep(10000);
 			if(TRANSFER_BAUD != INIT_BAUD)
 			{
 				close(fd);
