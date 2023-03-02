@@ -47,11 +47,11 @@ int main(int argc, char** argv) {
 
     char buff[4096];
 
-    if ((fd = open("/dev/ttyS0", O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
+    if ((fd = open("/dev/ttyS1", O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
         printf("OPEN TTY failed\n");
         return 0;
     } else {
-        set_option(fd, 115200, 8, 'N', 1);
+        set_option(fd, 921600, 8, 'N', 1);
         fcntl(fd, F_SETFL, FNDELAY);
         if (access("/root/800_480.tft", F_OK) == 0) {
             init_download_to_screen();
