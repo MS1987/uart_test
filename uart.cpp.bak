@@ -101,7 +101,7 @@ void parse_cmd(char *cmd) {
 				close(fd);
 				if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
 					printf("OPEN TTY failed\n");
-					return 0;
+					return;
 				} 
 				set_option(fd, TRANSFER_BAUD, 8, 'N', 1);
 			}
