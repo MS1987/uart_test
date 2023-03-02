@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
     } else {
         set_option(fd, 115200, 8, 'N', 1);
         fcntl(fd, F_SETFL, FNDELAY);
-        if (access("/root/800_480.tft", F_OK) == 0) {
+        if (access("./800_480.tft", F_OK) == 0) {
             init_download_to_screen();
             send_cmd_download(fd, filesize);
 			printf("open file ok\n");
