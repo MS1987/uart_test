@@ -19,7 +19,7 @@
 #define SEND_FILE_NAME  "./xindi_480_272.tft"
 #define UART_DEV	"/dev/ttyS0"
 #define INIT_BAUD		115200
-#define TRANSFER_BAUD 	460800
+#define TRANSFER_BAUD 	921600
 
 std::ifstream tftfile;
 int tft_buff = 4096;
