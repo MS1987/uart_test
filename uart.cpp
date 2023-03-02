@@ -17,6 +17,7 @@
 #include <memory>
 
 #define SEND_FILE_NAME  "./xindi_480_272.tft"
+#define UART_DEV	"/dev/ttyS0"
 #define INIT_BAUD		115200
 #define TRANSFER_BAUD 	460800
 
@@ -44,6 +45,8 @@ void download_to_screen();
 void send_cmd_download_data(int fd, std::string data);
 void send_cmd_download(int fd, int filesize);
 
+int first_ack = 0;
+
 int main(int argc, char** argv) {
     
 
@@ -51,7 +54,7 @@ int main(int argc, char** argv) {
 
     char buff[4096];
 
-    if ((fd = open("/dev/ttyS0", O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
+    if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
         printf("OPEN TTY failed\n");
         return 0;
     } else {
@@ -59,17 +62,9 @@ int main(int argc, char** argv) {
         fcntl(fd, F_SETFL, FNDELAY);
         if (access(SEND_FILE_NAME, F_OK) == 0) {
             init_download_to_screen();
+			first_ack = 0;
             send_cmd_download(fd, filesize);
-			usleep(10000);
-			if(TRANSFER_BAUD != INIT_BAUD)
-			{
-				close(fd);
-				if ((fd = open("/dev/ttyS0", O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
-					printf("OPEN TTY failed\n");
-					return 0;
-				} 
-				set_option(fd, TRANSFER_BAUD, 8, 'N', 1);
-			}
+			
 				
 			printf("open file ok\n");
         }
@@ -97,6 +92,20 @@ void parse_cmd(char *cmd) {
     switch (cmd[0])
     {
     case 0x5:
+		if(first_ack == 0)
+		{
+			first_ack = 1;
+			
+			if(TRANSFER_BAUD != INIT_BAUD)
+			{
+				close(fd);
+				if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
+					printf("OPEN TTY failed\n");
+					return 0;
+				} 
+				set_option(fd, TRANSFER_BAUD, 8, 'N', 1);
+			}
+		}
         download_to_screen();
         break;
     
