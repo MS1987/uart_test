@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
 				
 				if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
 					printf("OPEN TTY failed\n");
-					return;
+					return -1;
 				} 
 				set_option(fd, TRANSFER_BAUD, 8, 'N', 1);
 				
