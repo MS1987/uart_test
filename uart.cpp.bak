@@ -17,7 +17,7 @@
 #include <memory>
 
 #define SEND_FILE_NAME  "./xindi_480_272.tft"
-#define UART_DEV	"/dev/ttyS0"
+#define UART_DEV	"/dev/ttyS1"
 #define INIT_BAUD		115200
 #define TRANSFER_BAUD 	230400
 
@@ -313,7 +313,7 @@ void send_cmd_download_data(int fd, std::string data) {
         write(fd, sub_data.data(), sub_data.length());
         start = end;
         end = end + num;
-        usleep(55000);
+       // usleep(55000);
     }
 }
 
