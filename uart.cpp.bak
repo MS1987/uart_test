@@ -319,6 +319,8 @@ void send_cmd_download_data(int fd, std::string data) {
 			printf("Transfer error\n");
     }
 	#else
+	if(tcdrain(fd) < 0)
+		printf("Transfer error\n");
 	write(fd, data.data(), data.length());
 	if(tcdrain(fd) < 0)
 		printf("Transfer error\n");
