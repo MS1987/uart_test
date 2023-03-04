@@ -303,7 +303,7 @@ void send_cmd_download_data(int fd, std::string data) {
     int end = num;
     std::string sub_data;
 	printf("下载数据: %d\n", len);
-	#if 1
+	#if 0
     for (int start = 0; start < len; ) {
         if (end > len) {
             sub_data = data.substr(start, len - start);
@@ -319,9 +319,9 @@ void send_cmd_download_data(int fd, std::string data) {
 			printf("Transfer error\n");
     }
 	#else
-	usleep(55000);
 	write(fd, data.data(), data.length());
-	usleep(55000);
+	if(tcdrain(fd) < 0)
+		printf("Transfer error\n");
 	#endif
 }
 
