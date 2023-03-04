@@ -16,7 +16,7 @@
 #include <map>
 #include <memory>
 
-#define SEND_FILE_NAME  "./xindi_480_272.tft"
+#define SEND_FILE_NAME  "./QD_Plus3_UI5.0"
 #define UART_DEV	"/dev/ttyS1"
 #define INIT_BAUD		115200
 #define TRANSFER_BAUD 	230400
