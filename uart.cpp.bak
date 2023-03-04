@@ -313,7 +313,7 @@ void send_cmd_download_data(int fd, std::string data) {
         write(fd, sub_data.data(), sub_data.length());
         start = end;
         end = end + num;
-       // usleep(55000);
+        usleep(55000);
     }
 }
 
