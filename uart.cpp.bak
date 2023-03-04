@@ -129,7 +129,7 @@ int UartBuffSizeSet(char *dev_path,int size) {
     close(fd);
     return -2;
   }
-  serial.xmit_fifo_size = size; //1M
+  serial.xmit_fifo_size = size; 
   ret = ioctl(fd, TIOCSSERIAL, &serial);
   if(ret != 0) {
     close(fd);

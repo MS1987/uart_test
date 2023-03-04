@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <termios.h>
-#include <linux/serial.h>
+
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -44,7 +44,6 @@ void init_download_to_screen();
 void download_to_screen();
 void send_cmd_download_data(int fd, std::string data);
 void send_cmd_download(int fd, int filesize);
-int UartBuffSizeSet(char *dev_path,int size);
 
 //int first_ack = 0;
 
@@ -69,8 +68,6 @@ int main(int argc, char** argv) {
 			if(TRANSFER_BAUD != INIT_BAUD)
 			{
 				close(fd);
-				
-				UartBuffSizeSet(UART_DEV, 4096 + 1);
 				
 				if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
 					return -1;
@@ -103,7 +100,7 @@ int main(int argc, char** argv) {
 }
 
 void parse_cmd(char *cmd) {
-    std::cout << "Receive " << (int)cmd[0] << std::endl;
+   // std::cout << "Receive " << (int)cmd[0] << std::endl;
     switch (cmd[0])
     {
     case 0x5:
@@ -115,30 +112,6 @@ void parse_cmd(char *cmd) {
         break;
     }
 }
-
-
-int UartBuffSizeSet(char *dev_path,int size) {  
-  int ret;
-  int fd =  open(dev_path, O_RDWR | O_NOCTTY | O_NONBLOCK);
-  if(fd < 0){
-    return -1;
-  }
-  struct serial_struct serial;
-  ret = ioctl(fd, TIOCGSERIAL, &serial);
-  if (ret != 0) {
-    close(fd);
-    return -2;
-  }
-  serial.xmit_fifo_size = size; 
-  ret = ioctl(fd, TIOCSSERIAL, &serial);
-  if(ret != 0) {
-    close(fd);
-    return -3;
-  }
-  close(fd);
-  return 0;
-}
-
 
 int set_option(int fd, int baudrate, int bits, unsigned char parity, unsigned char stopbit) {
 
@@ -303,11 +276,11 @@ void init_download_to_screen() {
 }
 
 void download_to_screen() {
-    std::cout << "开始数据 " << tft_start << std::endl;
+    //std::cout << "开始数据 " << tft_start << std::endl;
     if (tft_start < tft_len) {
         if (tft_end > tft_len) {
             tft_s = tft_data.substr(tft_start, tft_len - tft_start);
-            std::cout << "发送下载数据 == " << tft_start << "/" << filesize <<std::endl;  
+           // std::cout << "发送下载数据 == " << tft_start << "/" << filesize <<std::endl;  
             send_cmd_download_data(fd, tft_s);
             // close(copy_fd);
 			send_finish = true;
@@ -315,7 +288,7 @@ void download_to_screen() {
 		else
 		{
 			tft_s = tft_data.substr(tft_start, tft_buff);
-			std::cout << tft_s.length() << " 发送下载数据 == " << tft_start << "/" << filesize <<std::endl;  
+			//std::cout << tft_s.length() << " 发送下载数据 == " << tft_start << "/" << filesize <<std::endl;  
 			tft_start = tft_end;
 			tft_end = tft_end + tft_buff;
 			send_cmd_download_data(fd, tft_s);
@@ -329,8 +302,8 @@ void send_cmd_download_data(int fd, std::string data) {
     int len = data.length();
     int end = num;
     std::string sub_data;
-	printf("下载数据: %d\n", len);
-	#if 0
+	//printf("下载数据: %d\n", len);
+
     for (int start = 0; start < len; ) {
         if (end > len) {
             sub_data = data.substr(start, len - start);
@@ -345,14 +318,7 @@ void send_cmd_download_data(int fd, std::string data) {
 		if(tcdrain(fd) < 0)
 			printf("Transfer error\n");
     }
-	#else
 	
-	
-	write(fd, data.data(), data.length());
-	if(tcdrain(fd) < 0)
-		printf("Transfer error\n");
-	
-	#endif
 }
 
 void send_cmd_download(int fd, int filesize) {
