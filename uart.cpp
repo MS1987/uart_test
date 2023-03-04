@@ -64,14 +64,14 @@ int main(int argc, char** argv) {
             init_download_to_screen();
 			//first_ack = 0;
             send_cmd_download(fd, filesize);			
-			usleep(20000);	
+			usleep(10000);	
 			if(TRANSFER_BAUD != INIT_BAUD)
 			{
 				close(fd);
 				
 				if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
-					printf("OPEN TTY failed\n");
 					return -1;
+					printf("OPEN TTY failed\n");
 				} 
 				set_option(fd, TRANSFER_BAUD, 8, 'N', 1);
 				
@@ -313,7 +313,7 @@ void send_cmd_download_data(int fd, std::string data) {
         write(fd, sub_data.data(), sub_data.length());
         start = end;
         end = end + num;
-        usleep(55000);
+       // usleep(55000);
     }
 }
 
