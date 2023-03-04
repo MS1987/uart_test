@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <termios.h>
-
+#include <linux/serial.h>
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -128,8 +128,8 @@ int UartBuffSizeSet(char *dev_path,int size) {
   if (ret != 0) {
     close(fd);
     return -2;
-  }+
-  serial.xmit_fifo_size = 1024*1024; //1M
+  }
+  serial.xmit_fifo_size = size; //1M
   ret = ioctl(fd, TIOCSSERIAL, &serial);
   if(ret != 0) {
     close(fd);
