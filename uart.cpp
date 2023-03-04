@@ -44,6 +44,7 @@ void init_download_to_screen();
 void download_to_screen();
 void send_cmd_download_data(int fd, std::string data);
 void send_cmd_download(int fd, int filesize);
+int UartBuffSizeSet(char *dev_path,int size);
 
 //int first_ack = 0;
 
@@ -68,6 +69,8 @@ int main(int argc, char** argv) {
 			if(TRANSFER_BAUD != INIT_BAUD)
 			{
 				close(fd);
+				
+				UartBuffSizeSet(UART_DEV, 4096 + 1);
 				
 				if ((fd = open(UART_DEV, O_RDWR | O_NDELAY | O_NOCTTY)) < 0) {
 					return -1;
@@ -112,6 +115,30 @@ void parse_cmd(char *cmd) {
         break;
     }
 }
+
+
+int UartBuffSizeSet(char *dev_path,int size) {  
+  int ret;
+  int fd =  open(dev_path, O_RDWR | O_NOCTTY | O_NONBLOCK);
+  if(fd < 0){
+    return -1;
+  }
+  struct serial_struct serial;
+  ret = ioctl(fd, TIOCGSERIAL, &serial);
+  if (ret != 0) {
+    close(fd);
+    return -2;
+  }+
+  serial.xmit_fifo_size = 1024*1024; //1M
+  ret = ioctl(fd, TIOCSSERIAL, &serial);
+  if(ret != 0) {
+    close(fd);
+    return -3;
+  }
+  close(fd);
+  return 0;
+}
+
 
 int set_option(int fd, int baudrate, int bits, unsigned char parity, unsigned char stopbit) {
 
@@ -298,12 +325,12 @@ void download_to_screen() {
 
 void send_cmd_download_data(int fd, std::string data) {
    
-    int num = 4095;
+    int num = 2048;
     int len = data.length();
     int end = num;
     std::string sub_data;
 	printf("下载数据: %d\n", len);
-	#if 1
+	#if 0
     for (int start = 0; start < len; ) {
         if (end > len) {
             sub_data = data.substr(start, len - start);
@@ -324,7 +351,7 @@ void send_cmd_download_data(int fd, std::string data) {
 	write(fd, data.data(), data.length());
 	if(tcdrain(fd) < 0)
 		printf("Transfer error\n");
-	usleep(1000);
+	
 	#endif
 }
 
