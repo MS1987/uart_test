@@ -298,7 +298,7 @@ void download_to_screen() {
 
 void send_cmd_download_data(int fd, std::string data) {
    
-    int num = 2048;
+    int num = 4096;
     int len = data.length();
     int end = num;
     std::string sub_data;
