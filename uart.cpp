@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <termios.h>
-
+#include <linux/serial.h>
 #include <iostream>
 #include <sstream>
 #include <fstream>
