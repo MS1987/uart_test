@@ -314,7 +314,9 @@ void send_cmd_download_data(int fd, std::string data) {
         write(fd, sub_data.data(), sub_data.length());
         start = end;
         end = end + num;
-        usleep(1550000);
+        //usleep(1550000);
+		if(tcdrain(fd) < 0)
+			printf("Transfer error\n");
     }
 	#else
 	usleep(55000);
