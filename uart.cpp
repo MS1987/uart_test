@@ -298,7 +298,7 @@ void download_to_screen() {
 
 void send_cmd_download_data(int fd, std::string data) {
    
-    int num = 512;
+    int num = 1024;
     int len = data.length();
     int end = num;
     std::string sub_data;
@@ -313,7 +313,7 @@ void send_cmd_download_data(int fd, std::string data) {
         write(fd, sub_data.data(), sub_data.length());
         start = end;
         end = end + num;
-        usleep(100);
+        usleep(55000);
     }
 }
 
