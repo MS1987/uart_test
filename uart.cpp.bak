@@ -303,7 +303,7 @@ void send_cmd_download_data(int fd, std::string data) {
     int end = num;
     std::string sub_data;
 	printf("下载数据: %d\n", len);
-	#if 0
+	#if 1
     for (int start = 0; start < len; ) {
         if (end > len) {
             sub_data = data.substr(start, len - start);
